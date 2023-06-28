@@ -6,7 +6,7 @@
 /*   By: ibehluli <ibehluli@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/06 08:33:34 by ibehluli      #+#    #+#                 */
-/*   Updated: 2023/06/26 18:19:46 by ibehluli      ########   odam.nl         */
+/*   Updated: 2023/06/28 17:44:47 by ibehluli      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,37 +26,45 @@
 # define BOLD "\033[1m"
 # define RESET "\x1b[0m"
 
-typedef struct s_forks{
-    pthread_mutex_t	forks;
-} t_forks;
-
-typedef struct s_philosopher{
-	pthread_t	philo;
-	t_forks		*left_fork;
-    t_forks		*right_fork;
+typedef struct s_generic
+{
 	long		start_time_s;
 	long		start_time_ms;
-	long		philosopher_id;
-	long		left_fork_picked;
-	long		right_fork_picked;
-	long		fork_id;
 	int			life_time;
 	int			eat_time;
 	int			sleep_time;
 	int			must_eat;
-	long		elapsed_time;
+} t_generic;
+
+typedef struct s_philosopher
+{
+	pthread_t			philo;
+	pthread_mutex_t		left_fork;
+    pthread_mutex_t		*right_fork;
+	t_generic			times;
+	int					numero_di_volte;
+	long				philosopher_id;
+	long				current_time_s;
+	long				current_time_ms;
+	long				elapsed_time;
+	long				last_eating_time;
 } t_philosopher;
 
 int		check_inputs(char **argv);
 int		philo_atoi(char *s1);
-void	create_philo(t_philosopher* philosopher, char **argv);
+void	create_forks(t_philosopher *philosopher, char **argv);
 void	eating();
-void	get_timing();
 void	get_left_fork(t_philosopher	*philosopher);
 void	get_right_fork(t_philosopher *philosopher);
 void	eating(t_philosopher *philosopher);
 void	thinking(t_philosopher *philosopher);
 void	sleeping(t_philosopher *philosopher);
+void	release_right_fork(t_philosopher *philosopher);
+void	release_left_fork(t_philosopher *philosopher);
 void	time_now(t_philosopher *philosopher);
+int		philo_is_death(t_philosopher *philosopher);
+void	create_philos(t_philosopher	*philosopher, char **argv);
+void 	create_philo(t_philosopher	*philosopher, char **argv);
+void	get_timing(t_philosopher *philosopher); 
 
 # endif
