@@ -6,7 +6,7 @@
 /*   By: ibehluli <ibehluli@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/06 08:33:15 by ibehluli      #+#    #+#                 */
-/*   Updated: 2023/06/28 14:39:41 by ibehluli      ########   odam.nl         */
+/*   Updated: 2023/07/12 14:40:36 by ibehluli      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,3 @@ int main(int argc, char **argv)
 	}
 	return (0);
 }
-//number_of_philosophers time_to_die time_to_eat time_to_sleep [number_of_times_each_philosopher_must_eat]

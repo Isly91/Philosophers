@@ -8,7 +8,7 @@ OBJ_DIR = object_files
 OBJ = $(addprefix $(OBJ_DIR)/,$(notdir $(SRC:.c=.o)))
 HEADER = -Iincludes/
 NAME = philo
-FLAGS = -Wall -Wextra -Werror -pthread -O3
+FLAGS = -Wall -Wextra -Werror -pthread -fsanitize=thread -g
 
 RED = \x1b[31;01m
 GREEN = \x1b[32;01m
