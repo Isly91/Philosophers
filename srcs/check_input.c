@@ -6,16 +6,16 @@
 /*   By: ibehluli <ibehluli@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/06 10:42:05 by ibehluli      #+#    #+#                 */
-/*   Updated: 2023/06/26 15:17:21 by ibehluli      ########   odam.nl         */
+/*   Updated: 2023/11/14 16:17:58 by ibehluli      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philosophers.h"
 
-int is_all_numbers(char *input)
+int	is_all_numbers(char *input)
 {
-	int i;
-	
+	int	i;
+
 	i = 0;
 	if (input[i] == '-')
 		return (0);
@@ -39,7 +39,7 @@ int is_all_numbers(char *input)
 int	philo_atoi(char *s1)
 {
 	int	i;
-	int number;
+	int	number;
 
 	i = 0;
 	number = 0;
@@ -53,9 +53,9 @@ int	philo_atoi(char *s1)
 	return (number);
 }
 
-int check_inputs(char **argv)
+int	check_inputs(char **argv)
 {
-	int i;
+	int	i;
 
 	i = 1;
 	if (!argv[i])

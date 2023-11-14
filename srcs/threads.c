@@ -6,7 +6,7 @@
 /*   By: ibehluli <ibehluli@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/11 13:48:07 by ibehluli      #+#    #+#                 */
-/*   Updated: 2023/11/14 13:14:27 by ibehluli      ########   odam.nl         */
+/*   Updated: 2023/11/14 16:22:15 by ibehluli      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,7 @@ void	*routine(void *philo_stru)
 	}
 	while (check_life(philo->generic_struct))
 	{
-		// mutex_lock_fork(philo);
 		philo_eating(philo);
-		// mutex_unlock_fork(philo);
 		philo_sleeping(philo);
 		philo_thinking(philo);
 	}

@@ -6,7 +6,7 @@
 /*   By: ibehluli <ibehluli@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/20 10:20:21 by ibehluli      #+#    #+#                 */
-/*   Updated: 2023/11/14 14:29:10 by ibehluli      ########   odam.nl         */
+/*   Updated: 2023/11/14 15:36:03 by ibehluli      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ void	*life(void *data_struct)
 	t_generic		*main_struct;
 	t_philosopher	*philo;
 
-	// check why 5 philo does not work with 800 200 200
 	main_struct = data_struct;
 	philo = main_struct->philo;
 	while (1)
@@ -96,7 +95,7 @@ void	*life(void *data_struct)
 int	create_philo(t_generic *main_struct)
 {
 	int			i;
-	pthread_t	doctor;
+	pthread_t	life_check;
 
 	i = 0;
 	philo_init(main_struct);
@@ -109,9 +108,9 @@ int	create_philo(t_generic *main_struct)
 			return (1);
 		i++;
 	}
-	if (pthread_create(&doctor, NULL, life, main_struct) != 0)
+	if (pthread_create(&life_check, NULL, life, main_struct) != 0)
 		return (0);
-	if (pthread_join(doctor, NULL) != 0)
+	if (pthread_join(life_check, NULL) != 0)
 		return (error_messages(5), 1);
 	return (0);
 }

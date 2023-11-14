@@ -6,7 +6,7 @@
 /*   By: ibehluli <ibehluli@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/20 10:12:08 by ibehluli      #+#    #+#                 */
-/*   Updated: 2023/11/14 13:14:06 by ibehluli      ########   odam.nl         */
+/*   Updated: 2023/11/14 15:59:49 by ibehluli      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	philo_eating(t_philosopher *philo)
 	philo->eaten++;
 	print_message(philo, 2);
 	pthread_mutex_unlock(&philo->generic_struct->eating);
-	my_usleep(philo->generic_struct->eat_time);
+	my_usleep(philo->generic_struct->eat_time, philo->generic_struct);
 	mutex_unlock_fork(philo);
 	return (0);
 }
@@ -30,7 +30,7 @@ int	philo_sleeping(t_philosopher *philo)
 	if (!check_life(philo->generic_struct))
 		return (1);
 	print_message(philo, 3);
-	my_usleep(philo->generic_struct->sleep_time);
+	my_usleep(philo->generic_struct->sleep_time, philo->generic_struct);
 	return (0);
 }
 

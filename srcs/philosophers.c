@@ -6,7 +6,7 @@
 /*   By: ibehluli <ibehluli@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/06 08:33:15 by ibehluli      #+#    #+#                 */
-/*   Updated: 2023/11/14 13:35:58 by ibehluli      ########   odam.nl         */
+/*   Updated: 2023/11/14 16:21:26 by ibehluli      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	special_case(t_generic *main)
 	if (!main)
 		return ;
 	printf("0 1 has taken a fork\n");
-	my_usleep(main->life_time);
+	my_usleep(main->life_time, main);
 	printf(BOLD"%ld 1 died\n"RESET, main->life_time);
 }
 
@@ -71,10 +71,7 @@ int	main(int argc, char **argv)
 		return (error_messages(3), 0);
 	main = fill_in_struct(main, argv, argc);
 	if (!main)
-	{
-		// ft_free_double_char(argv);
 		return (0);
-	}
 	mutex_init(main);
 	if (philo_atoi(argv[1]) == 1)
 		special_case(main);

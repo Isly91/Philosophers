@@ -6,7 +6,7 @@
 /*   By: ibehluli <ibehluli@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/20 10:16:24 by ibehluli      #+#    #+#                 */
-/*   Updated: 2023/11/14 11:18:31 by ibehluli      ########   odam.nl         */
+/*   Updated: 2023/11/14 16:21:12 by ibehluli      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,24 @@ long	get_time(void)
 	return (curr);
 }
 
-void	my_usleep(long parameter)
+void	my_usleep(long parameter, t_generic *dead_break)
 {
 	long	start;
 
 	start = get_time();
 	while ((get_time() - start) < parameter)
 	{
-		//has anyone died? // or eaten kk
+		pthread_mutex_lock(&dead_break->eating);
+		pthread_mutex_lock(&dead_break->life);
+		if (dead_break->dead_or_alive == 0
+			|| dead_break->philo->eaten == dead_break->number_of_meals)
+		{
+			pthread_mutex_unlock(&dead_break->life);
+			pthread_mutex_unlock(&dead_break->eating);
+			break ;
+		}
+		pthread_mutex_unlock(&dead_break->life);
+		pthread_mutex_unlock(&dead_break->eating);
 		usleep(200);
 	}
 }

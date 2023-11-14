@@ -6,7 +6,7 @@
 /*   By: ibehluli <ibehluli@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/06 08:33:34 by ibehluli      #+#    #+#                 */
-/*   Updated: 2023/11/14 13:25:29 by ibehluli      ########   odam.nl         */
+/*   Updated: 2023/11/14 16:15:57 by ibehluli      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,7 @@ int			mutex_init(t_generic *main);
 int			mutex_destroy(t_generic *main);
 //timing
 long		get_time(void);
-// void		my_usleep(long parameter);
-void 		my_usleep(long parameter);
+void		my_usleep(long parameter, t_generic *dead_break);
 int			monitoring(t_philosopher *philo, t_generic	*main_struct);
 void		ft_free(t_generic *main);
 
