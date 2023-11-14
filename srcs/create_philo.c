@@ -6,95 +6,110 @@
 /*   By: ibehluli <ibehluli@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/20 10:20:21 by ibehluli      #+#    #+#                 */
-/*   Updated: 2023/07/19 12:08:26 by ibehluli      ########   odam.nl         */
+/*   Updated: 2023/11/14 11:18:12 by ibehluli      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philosophers.h"
 
-void	*philosopher_action(void *arg)
+int	eating(t_philosopher *philo, t_generic *main_struct)
 {
-    t_philosopher	*philosopher;
-	int i;
-	
-	philosopher = arg;
+	int	i;
+	int	total_meals;
+
 	i = 0;
-	get_timing(philosopher);
-	if (philosopher->philosopher_id % 2 == 0)
-		my_usleep(philosopher->times.eat_time);
+	total_meals = 0;
+	while (i < philo->generic_struct->num_philo)
+	{
+		pthread_mutex_lock(&philo->generic_struct->eating);
+		if (philo[i].eaten == main_struct->number_of_meals)
+			total_meals++;
+		if (total_meals >= main_struct->num_philo)
+		{
+			pthread_mutex_unlock(&philo->generic_struct->eating);
+			return (death(main_struct), 1);
+		}
+		pthread_mutex_unlock(&philo->generic_struct->eating);
+		i++;
+	}
+	return (0);
+}
+
+t_generic	*fill_in_struct(t_generic *main, char **argv, int argc)
+{
+	main = malloc(sizeof(t_generic));
+	if (!main)
+		error_messages(2);
+	main->num_philo = philo_atoi(argv[1]);
+	main->life_time = philo_atoi(argv[2]);
+	main->eat_time = philo_atoi(argv[3]);
+	main->sleep_time = philo_atoi(argv[4]);
+	main->number_of_meals = 0;
+	if (argc == 6)
+		main->number_of_meals = philo_atoi(argv[5]);
+	main->dead_or_alive = 1;
+	main->philo = malloc(sizeof(t_philosopher) * main->num_philo);
+	if (!main->philo)
+		error_messages(2);
+	main->right_fork = malloc(sizeof(pthread_mutex_t) * main->num_philo);
+	if (!main->right_fork)
+		error_messages(2);
+	return (main);
+}
+
+void	philo_init(t_generic *main_struct)
+{
+	int	i;
+
+	i = 0;
+	while (i < main_struct->num_philo)
+	{
+		main_struct->philo[i].generic_struct = main_struct;
+		main_struct->philo[i].last_eaten = get_time();
+		main_struct->philo[i].sleeping = 0;
+		main_struct->philo[i].dying = main_struct->life_time;
+		main_struct->philo[i].eaten = 0;
+		i++;
+	}
+}
+
+void	*life(void *data_struct)
+{
+	t_generic		*main_struct;
+	t_philosopher	*philo;
+
+	// check why 5 philo does not work with 800 200 200
+	main_struct = data_struct;
+	philo = main_struct->philo;
 	while (1)
 	{
-		if (philosopher->times.must_eat || philosopher->dead_or_alive == 0)
-		{
-			if (i >= philosopher->times.must_eat)
-				break ;
-			i++;
-		}
-		get_left_fork(philosopher);
-		get_right_fork(philosopher);
-		time_now(philosopher);
-		eating(philosopher);
-		sleeping(philosopher);
-		thinking(philosopher);
+		if (main_struct->number_of_meals > 0 && eating(philo, main_struct))
+			return (NULL);
+		if (monitoring(philo, main_struct))
+			return (NULL);
 	}
 	return (NULL);
 }
-void	philo_0_attributes(t_philosopher	*philosopher, char **argv)
-{
-	philosopher[0].philosopher_id = 1;
-	philosopher[0].dead_or_alive = 1;
-	philosopher[0].times.life_time = philo_atoi(argv[2]);
-	philosopher[0].times.eat_time = philo_atoi(argv[3]);
-	philosopher[0].times.sleep_time = philo_atoi(argv[4]);
-	philosopher[0].times.must_eat = philo_atoi(argv[5]);
-	philosopher[0].right_fork = &philosopher[philo_atoi(argv[1]) - 1].left_fork;
-}
 
-void	create_forks(t_philosopher	*philosopher, char **argv)
+int	create_philo(t_generic *main_struct)
 {
-	int i;
-
-	i = 1;
-	pthread_mutex_init(&philosopher[0].left_fork, NULL);
-	pthread_mutex_init(&philosopher[0].times.print, NULL);
-	while (i < philo_atoi(argv[1])) 
-	{
-		pthread_mutex_init(&philosopher[i].left_fork, NULL);
-		pthread_mutex_init(&philosopher[i].times.print, NULL);
-		philosopher[i].right_fork = &philosopher[i - 1].left_fork;
-		philosopher[i].philosopher_id = i + 1;
-		philosopher[i].dead_or_alive = 1;
-		philosopher[i].times.life_time = philo_atoi(argv[2]);
-		philosopher[i].times.eat_time = philo_atoi(argv[3]);
-		philosopher[i].times.sleep_time = philo_atoi(argv[4]);
-		philosopher[i].times.must_eat = philo_atoi(argv[5]);
-		i++;
-    }
-	philo_0_attributes(philosopher, argv);
-}
-
-void create_philo(t_philosopher	*philosopher, char **argv)
-{
-	int i;
+	int			i;
+	pthread_t	doctor;
 
 	i = 0;
-	create_forks(philosopher, argv);
-    while (i < philo_atoi(argv[1]))
+	philo_init(main_struct);
+	main_struct->start_time = get_time();
+	while (i < main_struct->num_philo)
 	{
-        pthread_create(&philosopher[i].philo, NULL, philosopher_action, &philosopher[i]);
-		i++;
-    }
-	i = 0;
-    while (i < philo_atoi(argv[1]))
-	{
-		pthread_join(philosopher[i].philo, NULL);
-		i++;
-    }
-	i = 0;
-    while (i < philo_atoi(argv[1]))
-	{
-		pthread_mutex_destroy(&philosopher[i].left_fork);
-		pthread_mutex_destroy(&philosopher[i].times.print);
+		main_struct->philo[i].philosopher_id = i + 1;
+		if (pthread_create(&main_struct->philo[i].philo, NULL,
+				routine, &main_struct->philo[i]) != 0)
+			return (1);
 		i++;
 	}
+	if (pthread_create(&doctor, NULL, life, main_struct) != 0)
+		return (0);
+	if (pthread_join(doctor, NULL) != 0)
+		return (error_messages(5), 1);
+	return (0);
 }

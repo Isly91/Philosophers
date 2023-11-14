@@ -3,12 +3,14 @@ SRC = $(SRCS)/philosophers.c \
 		$(SRCS)/check_input.c \
 		$(SRCS)/actions.c \
 		$(SRCS)/time_scheduling.c \
-		$(SRCS)/create_philo.c
+		$(SRCS)/create_philo.c \
+		$(SRCS)/threads.c \
+		$(SRCS)/mutexes.c
 OBJ_DIR = object_files
 OBJ = $(addprefix $(OBJ_DIR)/,$(notdir $(SRC:.c=.o)))
 HEADER = -Iincludes/
 NAME = philo
-FLAGS = -Wall -Wextra -Werror -pthread -fsanitize=thread -g
+FLAGS = -Wall -Wextra -Werror -pthread #-g3 -fsanitize=thread
 
 RED = \x1b[31;01m
 GREEN = \x1b[32;01m

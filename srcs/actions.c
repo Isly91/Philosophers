@@ -6,55 +6,64 @@
 /*   By: ibehluli <ibehluli@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/20 10:12:08 by ibehluli      #+#    #+#                 */
-/*   Updated: 2023/07/19 12:08:08 by ibehluli      ########   odam.nl         */
+/*   Updated: 2023/11/14 11:18:03 by ibehluli      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../includes/philosophers.h"
+#include "../includes/philosophers.h"
 
-void	get_left_fork(t_philosopher	*philosopher)
+int	philo_eating(t_philosopher *philo)
 {
-	time_now(philosopher);
-	pthread_mutex_lock(&philosopher->left_fork);
-	print_message(philosopher, 'l');
+	usleep(500);
+	mutex_lock_fork(philo);
+	pthread_mutex_lock(&philo->generic_struct->eating);
+	philo->last_eaten = get_time();
+	philo->eaten++;
+	print_message(philo, 2);
+	pthread_mutex_unlock(&philo->generic_struct->eating);
+	my_usleep(philo->generic_struct->eat_time);
+	mutex_unlock_fork(philo);
+	return (0);
 }
 
-void	get_right_fork(t_philosopher *philosopher)
+int	philo_sleeping(t_philosopher *philo)
 {
-	pthread_mutex_lock(philosopher->right_fork);
-	print_message(philosopher, 'r');
-}
-void	sleeping(t_philosopher *philosopher)
-{
-	time_now(philosopher);
-	print_message(philosopher, 's');
-	my_usleep(philosopher->times.sleep_time);
+	if (!check_life(philo->generic_struct))
+		return (1);
+	print_message(philo, 3);
+	my_usleep(philo->generic_struct->sleep_time);
+	return (0);
 }
 
-void	thinking(t_philosopher *philosopher)
+int	philo_thinking(t_philosopher *philo)
 {
-	print_message(philosopher, 't');
+	if (!check_life(philo->generic_struct))
+		return (1);
+	print_message(philo, 4);
+	// my_usleep(50);
+	return (0);
 }
 
-void	eating(t_philosopher *philosopher)
+void	print_message(t_philosopher *philo, int what_to_print)
 {
-	time_now(philosopher);
-	print_message(philosopher, 'e');
-	my_usleep(philosopher->times.eat_time);
-	pthread_mutex_unlock(&philosopher->left_fork);
-	pthread_mutex_unlock(philosopher->right_fork);
-}
-
-void	print_message(t_philosopher	*philosopher, char action)
-{
-	if (action == 'l')
-		printf("%ld %ld picks up left fork\n", philosopher->elapsed_time, philosopher->philosopher_id);
-	else if (action == 'r')
-		printf("%ld %ld picks up right fork\n", philosopher->elapsed_time, philosopher->philosopher_id);
-	else if (action == 't')
-		printf(BLUE "%ld %ld is thinking\n"RESET, philosopher->elapsed_time, philosopher->philosopher_id);
-	else if (action == 's')
-		printf(RED"%ld %ld is sleeping\n"RESET, philosopher->elapsed_time, philosopher->philosopher_id);
-	else if (action == 'e')
-		printf( GREEN "%ld %ld is eating\n" RESET, philosopher->elapsed_time, philosopher->philosopher_id);
+	pthread_mutex_lock(&philo->generic_struct->life);
+	if (what_to_print == 0 && philo->generic_struct->dead_or_alive == 1)
+		printf ("%ld %d died\n", get_time()
+			- philo->generic_struct->start_time, philo->philosopher_id);
+	else if (what_to_print == 1 && philo->generic_struct->dead_or_alive == 1)
+		printf ("%ld %d has taken a fork\n", get_time()
+			- philo->generic_struct->start_time, philo->philosopher_id);
+	else if (what_to_print == 2 && philo->generic_struct->dead_or_alive == 1)
+		printf (GREEN"%ld %d is eating\n"RESET, get_time()
+			- philo->generic_struct->start_time, philo->philosopher_id);
+	else if (what_to_print == 3 && philo->generic_struct->dead_or_alive == 1)
+		printf (RED"%ld %d is sleeping\n"RESET, get_time()
+			- philo->generic_struct->start_time, philo->philosopher_id);
+	else if (what_to_print == 4 && philo->generic_struct->dead_or_alive == 1)
+		printf ("%ld %d is thinking\n"RESET, get_time()
+			- philo->generic_struct->start_time, philo->philosopher_id);
+	else if (what_to_print == 5 && philo->generic_struct->dead_or_alive == 0)
+		printf (BOLD"%ld %d died\n"RESET, get_time()
+			- philo->generic_struct->start_time, philo->philosopher_id);
+	pthread_mutex_unlock(&philo->generic_struct->life);
 }
