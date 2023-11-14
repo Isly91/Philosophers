@@ -6,7 +6,7 @@
 /*   By: ibehluli <ibehluli@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/20 10:20:21 by ibehluli      #+#    #+#                 */
-/*   Updated: 2023/11/14 11:18:12 by ibehluli      ########   odam.nl         */
+/*   Updated: 2023/11/14 14:29:10 by ibehluli      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,11 @@ int	eating(t_philosopher *philo, t_generic *main_struct)
 
 t_generic	*fill_in_struct(t_generic *main, char **argv, int argc)
 {
+	if (!argv)
+		return (NULL);
 	main = malloc(sizeof(t_generic));
 	if (!main)
-		error_messages(2);
+		return (error_messages(4), NULL);
 	main->num_philo = philo_atoi(argv[1]);
 	main->life_time = philo_atoi(argv[2]);
 	main->eat_time = philo_atoi(argv[3]);
@@ -50,10 +52,10 @@ t_generic	*fill_in_struct(t_generic *main, char **argv, int argc)
 	main->dead_or_alive = 1;
 	main->philo = malloc(sizeof(t_philosopher) * main->num_philo);
 	if (!main->philo)
-		error_messages(2);
+		return (free(main), error_messages(4), NULL);
 	main->right_fork = malloc(sizeof(pthread_mutex_t) * main->num_philo);
 	if (!main->right_fork)
-		error_messages(2);
+		return (free(main->philo), free(main), error_messages(4), NULL);
 	return (main);
 }
 

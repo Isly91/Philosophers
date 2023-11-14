@@ -6,7 +6,7 @@
 /*   By: ibehluli <ibehluli@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/06 08:33:34 by ibehluli      #+#    #+#                 */
-/*   Updated: 2023/11/14 11:17:57 by ibehluli      ########   odam.nl         */
+/*   Updated: 2023/11/14 13:25:29 by ibehluli      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,5 +77,6 @@ long		get_time(void);
 // void		my_usleep(long parameter);
 void 		my_usleep(long parameter);
 int			monitoring(t_philosopher *philo, t_generic	*main_struct);
+void		ft_free(t_generic *main);
 
 #endif

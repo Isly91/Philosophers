@@ -6,11 +6,22 @@
 /*   By: ibehluli <ibehluli@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/06 08:33:15 by ibehluli      #+#    #+#                 */
-/*   Updated: 2023/11/14 13:21:34 by ibehluli      ########   odam.nl         */
+/*   Updated: 2023/11/14 13:35:58 by ibehluli      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philosophers.h"
+
+void	ft_free_double_char(char **argv)
+{
+	int	i;
+
+	i = 0;
+	while (argv[i])
+		free(argv[i]);
+	if (argv)
+		free(argv);
+}
 
 void	ft_free(t_generic *main)
 {
@@ -61,7 +72,7 @@ int	main(int argc, char **argv)
 	main = fill_in_struct(main, argv, argc);
 	if (!main)
 	{
-		ft_free(main);
+		// ft_free_double_char(argv);
 		return (0);
 	}
 	mutex_init(main);
