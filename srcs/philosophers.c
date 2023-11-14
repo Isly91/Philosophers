@@ -6,7 +6,7 @@
 /*   By: ibehluli <ibehluli@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/06 08:33:15 by ibehluli      #+#    #+#                 */
-/*   Updated: 2023/11/14 11:18:22 by ibehluli      ########   odam.nl         */
+/*   Updated: 2023/11/14 13:21:34 by ibehluli      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	special_case(t_generic *main)
 		return ;
 	printf("0 1 has taken a fork\n");
 	my_usleep(main->life_time);
-	printf("Morto id: 1 al tempo %ld\n", main->life_time);
+	printf(BOLD"%ld 1 died\n"RESET, main->life_time);
 }
 
 int	main(int argc, char **argv)
@@ -54,18 +54,23 @@ int	main(int argc, char **argv)
 	t_generic	*main;
 
 	main = NULL;
-	if ((argc < 5 || argc > 6))
+	if ((argc < 5 || argc > 6) || !argv)
 		return (error_messages(2), 0);
 	if (check_inputs(argv) == 0)
 		return (error_messages(3), 0);
 	main = fill_in_struct(main, argv, argc);
 	if (!main)
-		return (ft_free(main), 0);
+	{
+		ft_free(main);
+		return (0);
+	}
 	mutex_init(main);
 	if (philo_atoi(argv[1]) == 1)
 		special_case(main);
-	else if (philo_atoi(argv[1]) > 1 && philo_atoi(argv[1]) < 200)
+	else if (philo_atoi(argv[1]) > 1 && philo_atoi(argv[1]) <= 200)
 		threads_and_routine(main);
+	else
+		printf("Please type num of philo between 1 and 200\n");
 	mutex_destroy(main);
 	ft_free(main);
 	return (0);

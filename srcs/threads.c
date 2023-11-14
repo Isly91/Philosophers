@@ -6,7 +6,7 @@
 /*   By: ibehluli <ibehluli@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/11 13:48:07 by ibehluli      #+#    #+#                 */
-/*   Updated: 2023/11/14 11:18:28 by ibehluli      ########   odam.nl         */
+/*   Updated: 2023/11/14 13:14:27 by ibehluli      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,10 @@ void	*routine(void *philo_stru)
 	t_philosopher	*philo;
 
 	philo = philo_stru;
-	if (philo->philosopher_id % 2 == 1)
+	if (philo->philosopher_id % 2 == 0)
 	{
 		print_message(philo, 4);
-		usleep(1500);
+		usleep(1250);
 	}
 	while (check_life(philo->generic_struct))
 	{
