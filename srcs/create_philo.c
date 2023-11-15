@@ -6,7 +6,7 @@
 /*   By: ibehluli <ibehluli@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/20 10:20:21 by ibehluli      #+#    #+#                 */
-/*   Updated: 2023/11/14 15:36:03 by ibehluli      ########   odam.nl         */
+/*   Updated: 2023/11/15 09:30:33 by ibehluli      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ int	eating(t_philosopher *philo, t_generic *main_struct)
 		if (total_meals >= main_struct->num_philo)
 		{
 			pthread_mutex_unlock(&philo->generic_struct->eating);
-			return (death(main_struct), 1);
+			death(main_struct);
+			return (1);
 		}
 		pthread_mutex_unlock(&philo->generic_struct->eating);
 		i++;

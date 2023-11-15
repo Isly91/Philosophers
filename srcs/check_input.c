@@ -6,7 +6,7 @@
 /*   By: ibehluli <ibehluli@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/06 10:42:05 by ibehluli      #+#    #+#                 */
-/*   Updated: 2023/11/14 16:17:58 by ibehluli      ########   odam.nl         */
+/*   Updated: 2023/11/14 18:43:04 by ibehluli      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ int	check_inputs(char **argv)
 	while (argv[i])
 	{
 		if (is_all_numbers(argv[i]) == 0)
+			return (0);
+		if (philo_atoi(argv[i]) < 0)
 			return (0);
 		i++;
 	}
