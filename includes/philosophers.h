@@ -6,7 +6,7 @@
 /*   By: ibehluli <ibehluli@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/06 08:33:34 by ibehluli      #+#    #+#                 */
-/*   Updated: 2023/11/14 16:15:57 by ibehluli      ########   odam.nl         */
+/*   Updated: 2023/11/20 14:27:15 by ibehluli      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ typedef struct s_generic
 	pthread_mutex_t			*right_fork;
 	pthread_mutex_t			life;
 	pthread_mutex_t			eating;
-	pthread_mutex_t			waiter;
 	long					start_time;
 	long					life_time;
 	long					eat_time;
