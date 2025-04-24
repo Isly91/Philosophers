@@ -46,8 +46,9 @@ make
 ```
 ## 🧪 Testing
 
+```bash
 ./philo 5 800 200 200
-
+```
 and
-
+```bash
 ./philo 5 800 200 200 7
